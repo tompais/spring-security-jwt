@@ -41,7 +41,5 @@ class SecurityService(
         role = createdUser.role
     )
 
-    override fun signUp(signUpRequest: SignUpRequest): SignUpResponse = createUser(signUpRequest).let { createdUser ->
-        buildSignUpResponse(createdUser)
-    }
+    override fun signUp(signUpRequest: SignUpRequest): SignUpResponse = buildSignUpResponse(createUser(signUpRequest))
 }
