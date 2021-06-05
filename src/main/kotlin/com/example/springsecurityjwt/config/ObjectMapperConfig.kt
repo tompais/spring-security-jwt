@@ -7,15 +7,22 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE
 import com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS
 import com.fasterxml.jackson.databind.SerializationFeature.WRITE_ENUMS_USING_TO_STRING
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
+import io.swagger.v3.core.jackson.ModelResolver
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import java.util.TimeZone
 
 @Configuration
 class ObjectMapperConfig {
     @Bean
+    @Primary
     fun snakeCaseMapper(): ObjectMapper = jacksonMapperBuilder()
+        .addModule(JavaTimeModule())
         .enable(WRITE_ENUMS_USING_TO_STRING)
         .enable(READ_ENUMS_USING_TO_STRING)
         .enable(ACCEPT_CASE_INSENSITIVE_ENUMS)
@@ -24,4 +31,22 @@ class ObjectMapperConfig {
         .defaultTimeZone(TimeZone.getTimeZone("UTC"))
         .propertyNamingStrategy(SNAKE_CASE)
         .build()
+
+    @Bean
+    fun jackson2ObjectMapperBuilder(): Jackson2ObjectMapperBuilder = Jackson2ObjectMapperBuilder()
+        .modules(JavaTimeModule())
+        .featuresToEnable(WRITE_ENUMS_USING_TO_STRING)
+        .featuresToEnable(READ_ENUMS_USING_TO_STRING)
+        .featuresToEnable(ACCEPT_CASE_INSENSITIVE_ENUMS)
+        .featuresToDisable(WRITE_DATES_AS_TIMESTAMPS)
+        .featuresToDisable(FAIL_ON_UNKNOWN_PROPERTIES)
+        .timeZone(TimeZone.getTimeZone("UTC"))
+        .propertyNamingStrategy(SNAKE_CASE)
+
+    @Bean
+    fun mappingJackson2HttpMessageConverter(objectMapper: ObjectMapper): MappingJackson2HttpMessageConverter =
+        MappingJackson2HttpMessageConverter(objectMapper)
+
+    @Bean
+    fun modelResolver(objectMapper: ObjectMapper): ModelResolver = ModelResolver(objectMapper)
 }
