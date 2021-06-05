@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import javax.servlet.FilterChain
@@ -36,7 +37,15 @@ class AuthorizationFilter(authenticationManager: AuthenticationManager) :
             .setSigningKey(Keys.hmacShaKeyFor(SECURITY_KEY.toByteArray()))
             .build()
             .parseClaimsJws(token)
-            .body?.let { user ->
-                UsernamePasswordAuthenticationToken(user, null, emptyList())
+            .body?.let { claims ->
+                UsernamePasswordAuthenticationToken(
+                    claims.subject,
+                    null,
+                    listOf(
+                        SimpleGrantedAuthority(
+                            claims.get("role", String::class.java)
+                        )
+                    )
+                )
             }
 }

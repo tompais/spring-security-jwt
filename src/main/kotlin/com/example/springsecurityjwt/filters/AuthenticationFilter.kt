@@ -8,7 +8,6 @@ import com.example.springsecurityjwt.utils.SecurityConstant.SECURITY_KEY
 import com.example.springsecurityjwt.utils.toDate
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
@@ -74,12 +73,23 @@ class AuthenticationFilter(
         chain: FilterChain,
         auth: Authentication
     ) {
-        val exp = LocalDateTime.now().plusMinutes(EXPIRATION_TIME_IN_MINUTES).toDate()
+        val creationDate = LocalDateTime.now()
+        val expirationDate = LocalDateTime.now().plusMinutes(EXPIRATION_TIME_IN_MINUTES)
         val key: Key = Keys.hmacShaKeyFor(SECURITY_KEY.toByteArray())
-        val user = (auth.principal as User)
-        val claims: Claims = Jwts.claims().setSubject(user.username)
+        val user = auth.principal as User
+        val claims = Jwts.claims(
+            mapOf(
+                "role" to user.role.toString()
+            )
+        )
         val token: String =
-            Jwts.builder().setClaims(claims).signWith(key, SignatureAlgorithm.HS512).setExpiration(exp).compact()
+            Jwts.builder()
+                .setSubject(user.username)
+                .setClaims(claims)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setIssuedAt(creationDate.toDate())
+                .setExpiration(expirationDate.toDate())
+                .compact()
         res.addHeader("X-Auth-Token", token)
         res.writeLogInResponse(user)
     }
