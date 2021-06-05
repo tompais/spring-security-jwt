@@ -1,5 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+object DependencyVersion {
+	const val OPEN_API = "1.5.9"
+}
+
 plugins {
 	id("org.springframework.boot") version "2.5.0"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -51,6 +55,11 @@ dependencies {
 	// Kotlin
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+	// Swagger
+	implementation("org.springdoc:springdoc-openapi-ui:${DependencyVersion.OPEN_API}")
+	implementation("org.springdoc:springdoc-openapi-data-rest:${DependencyVersion.OPEN_API}")
+	implementation("org.springdoc:springdoc-openapi-kotlin:${DependencyVersion.OPEN_API}")
 
 	// Dev Tools
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
