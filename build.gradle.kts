@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 object DependencyVersion {
 	const val OPEN_API = "1.5.9"
+	const val JJWT = "0.11.2"
 }
 
 plugins {
@@ -55,6 +56,11 @@ dependencies {
 	// Kotlin
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+	// JWT
+	implementation("io.jsonwebtoken:jjwt-impl:${DependencyVersion.JJWT}")
+	implementation("io.jsonwebtoken:jjwt-api:${DependencyVersion.JJWT}")
+	implementation("io.jsonwebtoken:jjwt-jackson:${DependencyVersion.JJWT}")
 
 	// Swagger
 	implementation("org.springdoc:springdoc-openapi-ui:${DependencyVersion.OPEN_API}")

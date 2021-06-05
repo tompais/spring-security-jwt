@@ -114,13 +114,13 @@ data class User(
     override fun getUsername(): String = username
 
     @JsonIgnore
-    override fun isAccountNonExpired(): Boolean = false
+    override fun isAccountNonExpired(): Boolean = true
 
     @JsonIgnore
-    override fun isAccountNonLocked(): Boolean = false
+    override fun isAccountNonLocked(): Boolean = true
 
     @JsonIgnore
-    override fun isCredentialsNonExpired(): Boolean = false
+    override fun isCredentialsNonExpired(): Boolean = true
 
     @JsonIgnore
     override fun isEnabled(): Boolean = status == ACTIVE

@@ -1,7 +1,7 @@
 package com.example.springsecurityjwt.controllers
 
 import com.example.springsecurityjwt.requests.SignUpRequest
-import com.example.springsecurityjwt.responses.SignUpResponse
+import com.example.springsecurityjwt.responses.SecurityResponse
 import com.example.springsecurityjwt.services.interfaces.ISecurityService
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
@@ -19,6 +19,6 @@ class SecurityController(
 ) {
     @PostMapping("/sign-up")
     @ResponseStatus(CREATED)
-    fun signUp(@RequestBody @Valid signUpRequest: SignUpRequest): SignUpResponse =
+    fun signUp(@RequestBody @Valid signUpRequest: SignUpRequest): SecurityResponse =
         securityService.signUp(signUpRequest)
 }

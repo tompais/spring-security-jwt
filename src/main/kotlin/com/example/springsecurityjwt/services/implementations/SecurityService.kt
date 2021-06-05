@@ -2,7 +2,7 @@ package com.example.springsecurityjwt.services.implementations
 
 import com.example.springsecurityjwt.models.User
 import com.example.springsecurityjwt.requests.SignUpRequest
-import com.example.springsecurityjwt.responses.SignUpResponse
+import com.example.springsecurityjwt.responses.SecurityResponse
 import com.example.springsecurityjwt.services.interfaces.ISecurityService
 import com.example.springsecurityjwt.services.interfaces.IUserService
 import org.springframework.dao.DataIntegrityViolationException
@@ -32,7 +32,7 @@ class SecurityService(
         throw ResponseStatusException(CONFLICT, "The user already exists.", e)
     }
 
-    private fun buildSignUpResponse(createdUser: User) = SignUpResponse(
+    private fun buildSignUpResponse(createdUser: User) = SecurityResponse(
         id = createdUser.id,
         firstName = createdUser.firstName,
         lastName = createdUser.lastName,
@@ -41,5 +41,5 @@ class SecurityService(
         role = createdUser.role
     )
 
-    override fun signUp(signUpRequest: SignUpRequest): SignUpResponse = buildSignUpResponse(createUser(signUpRequest))
+    override fun signUp(signUpRequest: SignUpRequest): SecurityResponse = buildSignUpResponse(createUser(signUpRequest))
 }
