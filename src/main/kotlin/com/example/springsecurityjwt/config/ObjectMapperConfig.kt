@@ -34,9 +34,15 @@ class ObjectMapperConfig {
 
     @Bean
     fun jackson2ObjectMapperBuilder(objectMapper: ObjectMapper): Jackson2ObjectMapperBuilder =
-        Jackson2ObjectMapperBuilder().apply {
-            configure(objectMapper)
-        }
+        Jackson2ObjectMapperBuilder()
+            .modules(JavaTimeModule())
+            .featuresToEnable(WRITE_ENUMS_USING_TO_STRING)
+            .featuresToEnable(READ_ENUMS_USING_TO_STRING)
+            .featuresToEnable(ACCEPT_CASE_INSENSITIVE_ENUMS)
+            .featuresToDisable(WRITE_DATES_AS_TIMESTAMPS)
+            .featuresToDisable(FAIL_ON_UNKNOWN_PROPERTIES)
+            .timeZone(TimeZone.getTimeZone("UTC"))
+            .propertyNamingStrategy(SNAKE_CASE)
 
     @Bean
     fun mappingJackson2HttpMessageConverter(objectMapper: ObjectMapper): MappingJackson2HttpMessageConverter =
