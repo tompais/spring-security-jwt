@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE
 import com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS
 import com.fasterxml.jackson.databind.SerializationFeature.WRITE_ENUMS_USING_TO_STRING
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
 import io.swagger.v3.core.jackson.ModelResolver
 import org.springframework.context.annotation.Bean
@@ -35,7 +36,7 @@ class ObjectMapperConfig {
     @Bean
     fun jackson2ObjectMapperBuilder(objectMapper: ObjectMapper): Jackson2ObjectMapperBuilder =
         Jackson2ObjectMapperBuilder()
-            .modules(JavaTimeModule())
+            .modules(KotlinModule(), JavaTimeModule())
             .featuresToEnable(WRITE_ENUMS_USING_TO_STRING)
             .featuresToEnable(READ_ENUMS_USING_TO_STRING)
             .featuresToEnable(ACCEPT_CASE_INSENSITIVE_ENUMS)
